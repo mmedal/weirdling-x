@@ -1,0 +1,7 @@
+name=Weirdling X
+author=Matthew Medal
+description=A game.
+bundleID=llc.mmedal.weirdling-x
+version=0.0.1
+buildNumber=1
+imagePath=images/launcher
