@@ -40,18 +40,35 @@ function TestLevel:inputHandler()
     return {
         downButtonDown = function()
             self.sprite:trigger_walkdown_ani()
+            self.sprite:moveDown()
+        end,
+        downButtonUp = function()
+            self.sprite:trigger_idle_ani()
+            self.sprite:stopMoving()
         end,
         upButtonDown = function()
             self.sprite:trigger_walkup_ani()
+            self.sprite:moveUp()
+        end,
+        upButtonUp = function()
+            self.sprite:trigger_idle_ani()
+            self.sprite:stopMoving()
         end,
         leftButtonDown = function()
             self.sprite:trigger_walkleft_ani()
+            self.sprite:moveLeft()
+        end,
+        leftButtonUp = function()
+            self.sprite:trigger_idle_ani()
+            self.sprite:stopMoving()
         end,
         rightButtonDown = function()
             self.sprite:trigger_walkright_ani()
+            self.sprite:moveRight()
         end,
-        AButtonDown = function()
+        rightButtonUp = function()
             self.sprite:trigger_idle_ani()
+            self.sprite:stopMoving()
         end,
     }
 end

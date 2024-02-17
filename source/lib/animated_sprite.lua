@@ -28,8 +28,8 @@ function AnimatedSprite:init(animations)
             self.currentAnimation = 'idle'
         end
         local name, yolo = next(self.animations)
-        print(name)
         self.animation = yolo
+        self.animation:setPaused(true)
     else
         self.animation = self.animations.idle
     end
@@ -60,10 +60,35 @@ function AnimatedSprite:init(animations)
     self.sprite.animated_sprite = self
     self.sprite.update = function(self)
         self:setImage(self.animated_sprite.animation:getImage())
+        self.animated_sprite.position.x = self.animated_sprite.position.x + self.animated_sprite.velocity.x
+        self.animated_sprite.position.y = self.animated_sprite.position.y + self.animated_sprite.velocity.y
+        self:moveTo(self.animated_sprite.position.x, self.animated_sprite.position.y)
     end
 
     self.position = { x = 50, y = 50 }
     self.velocity = { x = 0, y = 0 }
+    self.speed = 3
     self.sprite:moveTo(self.position.x, self.position.y)
     self.sprite:add()
+end
+
+function AnimatedSprite:moveLeft()
+    self.velocity.x = -self.speed
+end
+
+function AnimatedSprite:moveRight()
+    self.velocity.x = self.speed
+end
+
+function AnimatedSprite:moveUp()
+    self.velocity.y = -self.speed
+end
+
+function AnimatedSprite:moveDown()
+    self.velocity.y = self.speed
+end
+
+function AnimatedSprite:stopMoving()
+    self.velocity.x = 0
+    self.velocity.y = 0
 end
