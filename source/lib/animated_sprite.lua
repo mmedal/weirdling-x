@@ -8,6 +8,7 @@ local gfx <const> = playdate.graphics
 
 class('AnimatedSprite').extends()
 
+-- animations is a table of AnimatedImage objects
 -- {
 --     walk = AnimatedImage("/assets/images/sheet.png", {
 --         delay = 10,
@@ -27,7 +28,8 @@ function AnimatedSprite:init(animations)
             self.lastAnimation = self.currentAnimation
             self.currentAnimation = 'idle'
         end
-        local name, yolo = next(self.animations)
+        -- TODO need a better way to set a static idle image if no idle animation
+        local _, yolo = next(self.animations)
         self.animation = yolo
         self.animation:setPaused(true)
     else
