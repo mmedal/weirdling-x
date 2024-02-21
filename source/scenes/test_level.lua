@@ -2,11 +2,30 @@ import 'CoreLibs/object'
 
 import './scene'
 import '../lib/animated_sprite'
+import '../lib/level'
+
+local gfx <const> = playdate.graphics
 
 class('TestLevel').extends(Scene)
 
 function TestLevel:init()
-    self.meow = 'meow'
+    local tileset = gfx.imagetable.new('/assets/images/testterrain')
+    local tilemap = gfx.tilemap.new()
+    tilemap:setImageTable(tileset)
+    tilemap:setTiles(
+        {
+            8, 5, 1, 9, 1, 1, 9, 1, 8, 5,
+            10, 3, 4, 8, 4, 3, 5, 3, 4, 10,
+            7, 6, 10, 7, 4, 3, 6, 10, 7, 6,
+            8, 5, 3, 1, 4, 3, 1, 4, 8, 5, 7,
+            2, 6, 13, 7, 6, 13, 7, 2, 6
+        },
+        10)
+    gfx.sprite.setBackgroundDrawingCallback(
+        function(x, y, width, height)
+            tilemap:draw(0, 0)
+        end
+    )
     self.sprite = AnimatedSprite({
         walkdown = AnimatedImage('/assets/images/cecilsheet', {
             delay = 100,
