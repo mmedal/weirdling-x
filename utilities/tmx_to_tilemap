@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Check if a file name is provided as a command-line argument
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <filename>"
+    exit 1
+fi
+
+# File path from the first command-line argument, with quotes to handle spaces
+file_path="$1"
+
+# Extract numbers from the <data> tag and format as a Lua table
+lua_table=$(awk '/<data encoding="csv">/,/<\/data>/' "$file_path" | \
+            sed -e 's/<[^>]*>//g' | \
+            tr -d '\n' | \
+            sed 's/,/, /g' | \
+            sed 's/^, //' | \
+            sed 's/, $//' | \
+            awk '{print "{" $0 "}"}')
+
+echo $lua_table
