@@ -17,7 +17,10 @@ class('AnimatedSprite').extends()
 --         loop = true
 --     }),
 -- }
-function AnimatedSprite:init(animations)
+--
+-- updater is an object that implements the update method and accepts the sprite as an argument
+-- it can be used to let parent objects update the sprite
+function AnimatedSprite:init(position, animations, updater)
     -- self.static_image = gfx.image.new(static_image_path)
     self.sprite = gfx.sprite.new()
     self.animations = animations
@@ -59,38 +62,22 @@ function AnimatedSprite:init(animations)
         end
     end
 
+    -- allow a parent object to update the sprite easily
     self.sprite.animated_sprite = self
+    self.sprite.updater = updater
     self.sprite.update = function(self)
         self:setImage(self.animated_sprite.animation:getImage())
-        self.animated_sprite.position.x = self.animated_sprite.position.x + self.animated_sprite.velocity.x
-        self.animated_sprite.position.y = self.animated_sprite.position.y + self.animated_sprite.velocity.y
-        self:moveTo(self.animated_sprite.position.x, self.animated_sprite.position.y)
+        updater:update(self)
     end
 
-    self.position = { x = 50, y = 50 }
-    self.velocity = { x = 0, y = 0 }
-    self.speed = 3
-    self.sprite:moveTo(self.position.x, self.position.y)
+    -- set the starting position of the sprite, likely overridden quickly by update
+    self.sprite:moveTo(position.x, position.y)
+end
+
+function AnimatedSprite:show()
     self.sprite:add()
 end
 
-function AnimatedSprite:moveLeft()
-    self.velocity.x = -self.speed
-end
-
-function AnimatedSprite:moveRight()
-    self.velocity.x = self.speed
-end
-
-function AnimatedSprite:moveUp()
-    self.velocity.y = -self.speed
-end
-
-function AnimatedSprite:moveDown()
-    self.velocity.y = self.speed
-end
-
-function AnimatedSprite:stopMoving()
-    self.velocity.x = 0
-    self.velocity.y = 0
+function AnimatedSprite:hide()
+    self.sprite:remove()
 end

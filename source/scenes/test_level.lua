@@ -1,8 +1,10 @@
 import 'CoreLibs/object'
 
 import './scene'
-import '../lib/animated_sprite'
+import '../entities/player'
 import '../lib/level'
+import '../lib/tilemap_traversal'
+import '../input/player_input'
 
 local gfx <const> = playdate.graphics
 
@@ -21,73 +23,34 @@ function TestLevel:init()
             2, 6, 13, 7, 6, 13, 7, 2, 6
         },
         10)
+    local tilemap_traversal = TilemapTraversal(tilemap, {
+        { 1, 0, 0, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 0, 1 },
+        { 0, 1, 0, 0 },
+        { 1, 1, 0, 0 },
+        { 0, 1, 1, 0 },
+        { 0, 0, 1, 1 },
+        { 1, 0, 0, 1 },
+        { 1, 0, 1, 0 },
+        { 0, 1, 0, 1 },
+        { 1, 1, 1, 0 },
+        { 1, 0, 1, 1 },
+        { 0, 1, 1, 1 },
+        { 1, 1, 0, 1 },
+    })
     gfx.sprite.setBackgroundDrawingCallback(
         function(x, y, width, height)
             tilemap:draw(0, 0)
         end
     )
-    self.sprite = AnimatedSprite({
-        walkdown = AnimatedImage('/assets/images/cecilsheet', {
-            delay = 100,
-            sequence = { 1, 2 },
-            loop = true
-        }),
-        walkup = AnimatedImage('/assets/images/cecilsheet', {
-            delay = 100,
-            sequence = { 3, 4 },
-            loop = true
-        }),
-        walkleft = AnimatedImage('/assets/images/cecilsheet', {
-            delay = 100,
-            sequence = { 7, 8 },
-            loop = true
-        }),
-        walkright = AnimatedImage('/assets/images/cecilsheet', {
-            delay = 100,
-            sequence = { 5, 6 },
-            loop = true
-        }),
-    })
+    self.player = Player()
+    self.level = Level(tilemap, tilemap_traversal, { x = 1, y = 1 })
+    self.player:setLevel(self.level)
 end
 
 function TestLevel:load()
     print('TestLevel:load()')
-    playdate.inputHandlers.push(self:inputHandler())
-end
-
-function TestLevel:inputHandler()
-    return {
-        downButtonDown = function()
-            self.sprite:trigger_walkdown_ani()
-            self.sprite:moveDown()
-        end,
-        downButtonUp = function()
-            self.sprite:trigger_idle_ani()
-            self.sprite:stopMoving()
-        end,
-        upButtonDown = function()
-            self.sprite:trigger_walkup_ani()
-            self.sprite:moveUp()
-        end,
-        upButtonUp = function()
-            self.sprite:trigger_idle_ani()
-            self.sprite:stopMoving()
-        end,
-        leftButtonDown = function()
-            self.sprite:trigger_walkleft_ani()
-            self.sprite:moveLeft()
-        end,
-        leftButtonUp = function()
-            self.sprite:trigger_idle_ani()
-            self.sprite:stopMoving()
-        end,
-        rightButtonDown = function()
-            self.sprite:trigger_walkright_ani()
-            self.sprite:moveRight()
-        end,
-        rightButtonUp = function()
-            self.sprite:trigger_idle_ani()
-            self.sprite:stopMoving()
-        end,
-    }
+    self.player:spawn()
+    playdate.inputHandlers.push(PlayerInput.handle(self.player))
 end
