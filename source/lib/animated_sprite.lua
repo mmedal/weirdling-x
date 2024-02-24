@@ -66,8 +66,8 @@ function AnimatedSprite:init(position, animations, updater)
     self.sprite.animated_sprite = self
     self.sprite.updater = updater
     self.sprite.update = function(self)
-        self:setImage(self.animated_sprite.animation:getImage())
         updater:update(self)
+        self:setImage(self.animated_sprite.animation:getImage())
     end
 
     -- set the starting position of the sprite, likely overridden quickly by update

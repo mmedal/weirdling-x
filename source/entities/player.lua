@@ -48,22 +48,22 @@ function Player:init()
         player = self,
         callbacks = {
             onwalkingdown = function(self, event, from, to)
-                self.options.player.animated_sprite:trigger_walkdown_ani()
+                -- self.options.player.animated_sprite:trigger_walkdown_ani()
                 self.options.player.velocity.y = self.options.player.speed
                 self.options.player.velocity.x = 0
             end,
             onwalkingup = function(self, event, from, to)
-                self.options.player.animated_sprite:trigger_walkup_ani()
+                -- self.options.player.animated_sprite:trigger_walkup_ani()
                 self.options.player.velocity.y = -self.options.player.speed
                 self.options.player.velocity.x = 0
             end,
             onwalkingleft = function(self, event, from, to)
-                self.options.player.animated_sprite:trigger_walkleft_ani()
+                -- self.options.player.animated_sprite:trigger_walkleft_ani()
                 self.options.player.velocity.x = -self.options.player.speed
                 self.options.player.velocity.y = 0
             end,
             onwalkingright = function(self, event, from, to)
-                self.options.player.animated_sprite:trigger_walkright_ani()
+                -- self.options.player.animated_sprite:trigger_walkright_ani()
                 self.options.player.velocity.x = self.options.player.speed
                 self.options.player.velocity.y = 0
             end,
@@ -88,7 +88,20 @@ function Player:update(sprite)
     if self.machine.current == 'idling' then
         sprite:moveTo(self.position.x, self.position.y)
     else
+        -- We have to set the animation here because the fudge corner
+        -- allows the player to be moving in a direction that is not
+        -- the direction the player is holding on the dpad
         local new_position = self.level:pixelTraverse(self.position, self.velocity)
+        if new_position.x < self.position.x then
+            self.animated_sprite:trigger_walkleft_ani()
+        elseif new_position.x > self.position.x then
+            self.animated_sprite:trigger_walkright_ani()
+        elseif new_position.y < self.position.y then
+            self.animated_sprite:trigger_walkup_ani()
+        elseif new_position.y > self.position.y then
+            self.animated_sprite:trigger_walkdown_ani()
+        else
+        end
         self.position = new_position
         sprite:moveTo(new_position.x, new_position.y)
     end
