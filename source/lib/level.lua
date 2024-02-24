@@ -53,6 +53,7 @@ function Level:pixelTraverse(position, velocity)
     local tilepos = self:pixelXYToTileXY(position.x, position.y)
     local tile_x = tilepos.x
     local tile_y = tilepos.y
+    local fudgeCorner = 5
     local center = self:centerOfTile(tile_x, tile_y)
     local new_position = { x = position.x, y = position.y }
     -- Moving up
@@ -60,58 +61,72 @@ function Level:pixelTraverse(position, velocity)
         local speed = velocity.y
         assert(speed < self.half_tile_pixel_height, "Level:pixelTraverse: speed is too large")
         new_position.y = new_position.y + speed
-        if (position.y >= center.y) and (new_position.y < center.y) then
-            if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, 'up') then
-                return new_position
+        if position.x == center.x then
+            if (position.y >= center.y) and (new_position.y < center.y) then
+                if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, 'up') then
+                    return new_position
+                else
+                    return center
+                end
             else
-                return center
+                return new_position
             end
         else
-            return new_position
+            return position
         end
         -- Moving right
     elseif velocity.x > 0 then
         local speed = velocity.x
         assert(speed < self.half_tile_pixel_width, "Level:pixelTraverse: speed is too large")
         new_position.x = new_position.x + speed
-        if (position.x <= center.x) and (new_position.x > center.x) then
-            if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, 'right') then
-                return new_position
+        if position.y == center.y then
+            if (position.x <= center.x) and (new_position.x > center.x) then
+                if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, 'right') then
+                    return new_position
+                else
+                    return center
+                end
             else
-                return center
+                return new_position
             end
         else
-            return new_position
+            return position
         end
         -- Moving down
     elseif velocity.y > 0 then
         local speed = velocity.y
         assert(speed < self.half_tile_pixel_height, "Level:pixelTraverse: speed is too large")
         new_position.y = new_position.y + speed
-        if (position.y <= center.y) and (new_position.y > center.y) then
-            if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, 'down') then
-                return new_position
+        if position.x == center.x then
+            if (position.y <= center.y) and (new_position.y > center.y) then
+                if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, 'down') then
+                    return new_position
+                else
+                    return center
+                end
             else
-                return center
+                return new_position
             end
         else
-            return new_position
+            return position
         end
         -- Moving left
     elseif velocity.x < 0 then
         local speed = velocity.x
         assert(speed < self.half_tile_pixel_width, "Level:pixelTraverse: speed is too large")
         new_position.x = new_position.x + speed
-        if (position.x >= center.x) and (new_position.x < center.x) then
-            if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, 'left') then
-                return new_position
+        if position.y == center.y then
+            if (position.x >= center.x) and (new_position.x < center.x) then
+                if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, 'left') then
+                    return new_position
+                else
+                    return center
+                end
             else
-                return center
+                return new_position
             end
         else
-            return new_position
+            return position
         end
-    else
-        return position
     end
 end
