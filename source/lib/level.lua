@@ -49,11 +49,15 @@ function Level:canTraverse(tile1_x, tile1_y, tile2_x, tile2_y, direction)
     return self.tilemap_traversal:canTraverse(tile1_x, tile1_y, tile2_x, tile2_y, direction)
 end
 
+function Level:sign(number)
+    return number > 0 and 1 or (number == 0 and 0 or -1)
+end
+
 function Level:pixelTraverse(position, velocity)
     local tilepos = self:pixelXYToTileXY(position.x, position.y)
     local tile_x = tilepos.x
     local tile_y = tilepos.y
-    local fudgeCorner = 5
+    local fudge_corner = 20
     local center = self:centerOfTile(tile_x, tile_y)
     local new_position = { x = position.x, y = position.y }
     -- Moving up
@@ -70,6 +74,20 @@ function Level:pixelTraverse(position, velocity)
                 end
             else
                 return new_position
+            end
+        elseif math.abs(position.x - center.x) < fudge_corner then
+            if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, 'up') then
+                local distance_to_center = position.x - center.x
+                local sdistance = self:sign(distance_to_center)
+                local abs_distance = math.abs(distance_to_center)
+                local abs_speed = math.abs(speed)
+                if abs_distance > abs_speed then
+                    return { x = position.x - (sdistance * abs_speed), y = position.y }
+                else
+                    return center
+                end
+            else
+                return position
             end
         else
             return position
@@ -89,6 +107,20 @@ function Level:pixelTraverse(position, velocity)
             else
                 return new_position
             end
+        elseif math.abs(position.y - center.y) < fudge_corner then
+            if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, 'right') then
+                local distance_to_center = position.y - center.y
+                local sdistance = self:sign(distance_to_center)
+                local abs_distance = math.abs(distance_to_center)
+                local abs_speed = math.abs(speed)
+                if abs_distance > abs_speed then
+                    return { x = position.x, y = position.y - (sdistance * abs_speed) }
+                else
+                    return center
+                end
+            else
+                return position
+            end
         else
             return position
         end
@@ -107,6 +139,20 @@ function Level:pixelTraverse(position, velocity)
             else
                 return new_position
             end
+        elseif math.abs(position.x - center.x) < fudge_corner then
+            if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, 'down') then
+                local distance_to_center = position.x - center.x
+                local sdistance = self:sign(distance_to_center)
+                local abs_distance = math.abs(distance_to_center)
+                local abs_speed = math.abs(speed)
+                if abs_distance > abs_speed then
+                    return { x = position.x - (sdistance * abs_speed), y = position.y }
+                else
+                    return center
+                end
+            else
+                return position
+            end
         else
             return position
         end
@@ -124,6 +170,20 @@ function Level:pixelTraverse(position, velocity)
                 end
             else
                 return new_position
+            end
+        elseif math.abs(position.y - center.y) < fudge_corner then
+            if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, 'left') then
+                local distance_to_center = position.y - center.y
+                local sdistance = self:sign(distance_to_center)
+                local abs_distance = math.abs(distance_to_center)
+                local abs_speed = math.abs(speed)
+                if abs_distance > abs_speed then
+                    return { x = position.x, y = position.y - (sdistance * abs_speed) }
+                else
+                    return center
+                end
+            else
+                return position
             end
         else
             return position
