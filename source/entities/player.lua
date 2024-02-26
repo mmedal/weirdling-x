@@ -85,6 +85,8 @@ function Player:setLevel(level)
 end
 
 function Player:update(sprite)
+    -- TODO: need to add support for saving state of which buttons are being hend
+    -- and the order, so that we can resume movement after part of a chord is released
     if self.machine.current == 'idling' then
         sprite:moveTo(self.position.x, self.position.y)
     else
@@ -101,6 +103,9 @@ function Player:update(sprite)
         elseif new_position.y > self.position.y then
             self.animated_sprite:trigger_walkdown_ani()
         else
+        end
+        if self.position == new_position then
+            self.machine:idle()
         end
         self.position = new_position
         sprite:moveTo(new_position.x, new_position.y)
