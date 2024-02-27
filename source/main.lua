@@ -9,11 +9,11 @@ import "CoreLibs/ui"
 import "./game"
 
 local gfx <const> = playdate.graphics
--- playdate.display.setRefreshRate(40)
+playdate.display.setRefreshRate(40)
 Game.machine:boot()
 
 function playdate.update()
     gfx.sprite.update()
     playdate.timer.updateTimers()
-    -- playdate.drawFPS(380, 0)
+    playdate.drawFPS(380, 0)
 end
