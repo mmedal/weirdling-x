@@ -5,10 +5,15 @@ local gfx <const> = playdate.graphics
 
 class('SimpleSprite').extends()
 
-function SimpleSprite:init(position, image, updater)
+-- options.flip can be specified as a gfx.flip value
+function SimpleSprite:init(position, image, updater, options)
     self.image = image
-    self.sprite = gfx.sprite.new()
+    self.sprite = gfx.sprite.new(image)
+    if options and options.flip then
+        self.sprite:setImageFlip(options.flip)
+    end
     self.sprite:moveTo(position.x, position.y)
+    self.sprite:add()
 
     self.updater = updater
     self.sprite.simple_sprite = self

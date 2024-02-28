@@ -2,6 +2,7 @@ import "CoreLibs/object"
 import "CoreLibs/sprites"
 
 import "../constants"
+import "../entities/bullet"
 import "../lib/animated_image"
 import "../lib/animated_sprite"
 import "../lib/machine"
@@ -45,6 +46,7 @@ function Player:init()
             { name = 'walkup',    from = '*', to = 'walkingup' },
             { name = 'walkleft',  from = '*', to = 'walkingleft' },
             { name = 'walkright', from = '*', to = 'walkingright' },
+            { name = 'shoot',     from = '*', to = 'shooting' },
             { name = 'idle',      from = '*', to = 'idling' },
         },
         player = self,
@@ -68,6 +70,10 @@ function Player:init()
                 -- self.options.player.animated_sprite:trigger_walkright_ani()
                 self.options.player.velocity.x = self.options.player.speed
                 self.options.player.velocity.y = 0
+            end,
+            onshooting = function(self, event, from, to)
+                Bullet(self.options.player)
+                self:idle()
             end,
             onidling = function(self, event, from, to)
                 self.options.player.animated_sprite:trigger_idle_ani()

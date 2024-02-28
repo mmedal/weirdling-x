@@ -36,5 +36,8 @@ function PlayerInput.handle(player)
                 player.machine:idle()
             end
         end,
+        BButtonDown = function()
+            player.machine:shoot()
+        end,
     }
 end
