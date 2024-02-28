@@ -1,6 +1,8 @@
 import "CoreLibs/object"
 import "CoreLibs/sprites"
 
+import "../constants"
+import "../lib/animated_image"
 import "../lib/animated_sprite"
 import "../lib/machine"
 
@@ -74,6 +76,7 @@ function Player:init()
             end,
         }
     })
+    self.facing = Constants.DOWN
     self.position = { x = 0, y = 0 }
     self.velocity = { x = 0, y = 0 }
     self.speed = 3
@@ -96,12 +99,16 @@ function Player:update(sprite)
         local new_position = self.level:pixelTraverse(self.position, self.velocity)
         if new_position.x < self.position.x then
             self.animated_sprite:trigger_walkleft_ani()
+            self.facing = Constants.LEFT
         elseif new_position.x > self.position.x then
             self.animated_sprite:trigger_walkright_ani()
+            self.facing = Constants.RIGHT
         elseif new_position.y < self.position.y then
             self.animated_sprite:trigger_walkup_ani()
+            self.facing = Constants.UP
         elseif new_position.y > self.position.y then
             self.animated_sprite:trigger_walkdown_ani()
+            self.facing = Constants.DOWN
         else
         end
         if self.position == new_position then
