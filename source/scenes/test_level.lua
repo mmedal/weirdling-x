@@ -1,6 +1,7 @@
 import 'CoreLibs/object'
 
 import './scene'
+import '../entities/test_chicken'
 import '../entities/player'
 import '../lib/level'
 import '../lib/tilemap_traversal'
@@ -47,6 +48,8 @@ function TestLevel:init()
     self.player = Player()
     self.level = Level(tilemap, tilemap_traversal, { x = 1, y = 1 })
     self.player:setLevel(self.level)
+    self.chicken = TestChicken(self.level, { x = 5, y = 5 })
+    self.chicken:show()
 end
 
 function TestLevel:load()
