@@ -47,7 +47,7 @@ end
 
 function TestChicken:update(sprite)
     if self.machine.current == 'idling' then
-        self:attemptMove(Constants.randomDirection())
+        self.machine:attemptmove(Constants.randomDirection())
     else
         self:applyMove()
     end
