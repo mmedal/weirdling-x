@@ -102,6 +102,21 @@ function Machine:init(options)
     end
 end
 
+function Machine:add_events(events)
+    for _, event in ipairs(events) do
+        local name = event.name
+        self[name] = self[name] or create_transition(name)
+        self.events[name] = self.events[name] or { map = {} }
+        add_to_map(self.events[name].map, event)
+    end
+end
+
+function Machine:add_callbacks(callbacks)
+    for name, callback in pairs(callbacks) do
+        self[name] = callback
+    end
+end
+
 function Machine:is(state)
     return self.current == state
 end

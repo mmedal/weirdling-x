@@ -51,7 +51,7 @@ function AnimatedSprite:init(position, animations, updater)
                 end
             end
             if self.currentAnimation == name then
-                return
+                self.animation:setPaused(false)
             else
                 self.lastAnimation = self.currentAnimation
                 self.animation = animation
@@ -72,6 +72,27 @@ function AnimatedSprite:init(position, animations, updater)
 
     -- set the starting position of the sprite, likely overridden quickly by update
     self.sprite:moveTo(position.x, position.y)
+end
+
+function AnimatedSprite:addAnimations(animations)
+    for name, animation in pairs(animations) do
+        self.animations[name] = animation
+        self['trigger_' .. name .. '_ani'] = function(self)
+            if self.currentAnimation == name then
+                return
+            else
+                self.lastAnimation = self.currentAnimation
+                self.animation = animation
+                self.currentAnimation = name
+                self.animation:reset()
+                self.animation:setPaused(false)
+            end
+        end
+    end
+end
+
+function AnimatedSprite:moveTo(x, y)
+    self.sprite:moveTo(x, y)
 end
 
 function AnimatedSprite:show()

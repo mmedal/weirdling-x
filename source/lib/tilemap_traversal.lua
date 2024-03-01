@@ -1,5 +1,7 @@
 import 'CoreLibs/object'
 
+import '../constants'
+
 class('TilemapTraversal').extends()
 
 -- tile_bounds is a table of tables containing wall data of tiles, in
@@ -20,13 +22,13 @@ function TilemapTraversal:canTraverse(x1, y1, x2, y2, direction)
     local tile1 = self.tile_bounds[self.tilemap:getTileAtPosition(x1, y1)]
     local tile2 = self.tile_bounds[self.tilemap:getTileAtPosition(x2, y2)]
 
-    if direction == 'up' then
+    if direction == Constants.UP then
         return tile1[1] == 0 and tile2[3] == 0
-    elseif direction == 'right' then
+    elseif direction == Constants.RIGHT then
         return tile1[2] == 0 and tile2[4] == 0
-    elseif direction == 'down' then
+    elseif direction == Constants.DOWN then
         return tile1[3] == 0 and tile2[1] == 0
-    elseif direction == 'left' then
+    elseif direction == Constants.LEFT then
         return tile1[4] == 0 and tile2[2] == 0
     else
         error("TilemapTraversal: invalid direction")

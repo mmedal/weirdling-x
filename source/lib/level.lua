@@ -1,5 +1,7 @@
 import 'CoreLibs/object'
 
+import '../constants'
+
 class('Level').extends()
 
 function Level:init(tilemap, tilemap_traversal, player_spawn_xy)
@@ -45,6 +47,19 @@ function Level:centerOfTile(tile_x, tile_y)
     return self.tile_centers[(tile_y - 1) * self.tile_width + (tile_x - 1)]
 end
 
+function Level:canMove(positionXY, direction)
+    local tileXY = self:pixelXYToTileXY(positionXY.x, positionXY.y)
+    if direction == Constants.UP then
+        return self.tilemap_traversal:canTraverse(tileXY.x, tileXY.y, tileXY.x, tileXY.y - 1, direction)
+    elseif direction == Constants.DOWN then
+        return self.tilemap_traversal:canTraverse(tileXY.x, tileXY.y, tileXY.x, tileXY.y + 1, direction)
+    elseif direction == Constants.LEFT then
+        return self.tilemap_traversal:canTraverse(tileXY.x, tileXY.y, tileXY.x - 1, tileXY.y, direction)
+    elseif direction == Constants.RIGHT then
+        return self.tilemap_traversal:canTraverse(tileXY.x, tileXY.y, tileXY.x + 1, tileXY.y, direction)
+    end
+end
+
 function Level:canTraverse(tile1_x, tile1_y, tile2_x, tile2_y, direction)
     return self.tilemap_traversal:canTraverse(tile1_x, tile1_y, tile2_x, tile2_y, direction)
 end
@@ -67,7 +82,7 @@ function Level:pixelTraverse(position, velocity)
         new_position.y = new_position.y + speed
         if position.x == center.x then
             if (position.y >= center.y) and (new_position.y < center.y) then
-                if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, 'up') then
+                if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, Constants.UP) then
                     return new_position
                 else
                     return center
@@ -76,7 +91,7 @@ function Level:pixelTraverse(position, velocity)
                 return new_position
             end
         elseif math.abs(position.x - center.x) < fudge_corner then
-            if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, 'up') then
+            if self:canTraverse(tile_x, tile_y, tile_x, tile_y - 1, Constants.UP) then
                 local distance_to_center = position.x - center.x
                 local sdistance = self:sign(distance_to_center)
                 local abs_distance = math.abs(distance_to_center)
@@ -99,7 +114,7 @@ function Level:pixelTraverse(position, velocity)
         new_position.x = new_position.x + speed
         if position.y == center.y then
             if (position.x <= center.x) and (new_position.x > center.x) then
-                if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, 'right') then
+                if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, Constants.RIGHT) then
                     return new_position
                 else
                     return center
@@ -108,7 +123,7 @@ function Level:pixelTraverse(position, velocity)
                 return new_position
             end
         elseif math.abs(position.y - center.y) < fudge_corner then
-            if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, 'right') then
+            if self:canTraverse(tile_x, tile_y, tile_x + 1, tile_y, Constants.RIGHT) then
                 local distance_to_center = position.y - center.y
                 local sdistance = self:sign(distance_to_center)
                 local abs_distance = math.abs(distance_to_center)
@@ -131,7 +146,7 @@ function Level:pixelTraverse(position, velocity)
         new_position.y = new_position.y + speed
         if position.x == center.x then
             if (position.y <= center.y) and (new_position.y > center.y) then
-                if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, 'down') then
+                if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, Constants.DOWN) then
                     return new_position
                 else
                     return center
@@ -140,7 +155,7 @@ function Level:pixelTraverse(position, velocity)
                 return new_position
             end
         elseif math.abs(position.x - center.x) < fudge_corner then
-            if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, 'down') then
+            if self:canTraverse(tile_x, tile_y, tile_x, tile_y + 1, Constants.DOWN) then
                 local distance_to_center = position.x - center.x
                 local sdistance = self:sign(distance_to_center)
                 local abs_distance = math.abs(distance_to_center)
@@ -163,7 +178,7 @@ function Level:pixelTraverse(position, velocity)
         new_position.x = new_position.x + speed
         if position.y == center.y then
             if (position.x >= center.x) and (new_position.x < center.x) then
-                if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, 'left') then
+                if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, Constants.LEFT) then
                     return new_position
                 else
                     return center
@@ -172,7 +187,7 @@ function Level:pixelTraverse(position, velocity)
                 return new_position
             end
         elseif math.abs(position.y - center.y) < fudge_corner then
-            if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, 'left') then
+            if self:canTraverse(tile_x, tile_y, tile_x - 1, tile_y, Constants.LEFT) then
                 local distance_to_center = position.y - center.y
                 local sdistance = self:sign(distance_to_center)
                 local abs_distance = math.abs(distance_to_center)

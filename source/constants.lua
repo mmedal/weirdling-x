@@ -23,3 +23,7 @@ function Constants.velocityFromFacing(facing, speed)
         return { x = speed, y = 0 }
     end
 end
+
+function Constants.randomDirection()
+    return math.random(1, 4)
+end
