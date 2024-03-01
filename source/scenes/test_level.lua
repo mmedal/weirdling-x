@@ -45,15 +45,14 @@ function TestLevel:init()
             tilemap:draw(0, 0)
         end
     )
-    self.player = Player()
     self.level = Level(tilemap, tilemap_traversal, { x = 1, y = 1 })
-    self.player:setLevel(self.level)
+    self.player = Player(self.level, self.level.player_spawn_xy)
+    self.player:show()
     self.chicken = TestChicken(self.level, { x = 5, y = 5 })
     self.chicken:show()
 end
 
 function TestLevel:load()
     print('TestLevel:load()')
-    self.player:spawn()
     playdate.inputHandlers.push(PlayerInput.handle(self.player))
 end

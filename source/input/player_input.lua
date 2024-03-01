@@ -1,38 +1,59 @@
 import 'CoreLibs/object'
 
+import '../constants'
+
 class('PlayerInput').extends()
+
+PlayerInput.dpad = {
+    up = false,
+    down = false,
+    left = false,
+    right = false,
+}
+
+function PlayerInput.dpadHeld()
+    return PlayerInput.dpad.up or PlayerInput.dpad.down or PlayerInput.dpad.left or PlayerInput.dpad.right
+end
 
 function PlayerInput.handle(player)
     return {
         downButtonDown = function()
-            player.machine:walkdown()
+            PlayerInput.dpad.down = true
+            player.machine:attemptmove(Constants.DOWN)
         end,
         downButtonUp = function()
-            if player.machine.current == 'walkingdown' then
+            PlayerInput.dpad.down = false
+            if not PlayerInput.dpadHeld() then
                 player.machine:idle()
             end
         end,
         upButtonDown = function()
-            player.machine:walkup()
+            PlayerInput.dpad.up = true
+            player.machine:attemptmove(Constants.UP)
         end,
         upButtonUp = function()
-            if player.machine.current == 'walkingup' then
+            PlayerInput.dpad.up = false
+            if not PlayerInput.dpadHeld() then
                 player.machine:idle()
             end
         end,
         leftButtonDown = function()
-            player.machine:walkleft()
+            PlayerInput.dpad.left = true
+            player.machine:attemptmove(Constants.LEFT)
         end,
         leftButtonUp = function()
-            if player.machine.current == 'walkingleft' then
+            PlayerInput.dpad.left = false
+            if not PlayerInput.dpadHeld() then
                 player.machine:idle()
             end
         end,
         rightButtonDown = function()
-            player.machine:walkright()
+            PlayerInput.dpad.right = true
+            player.machine:attemptmove(Constants.RIGHT)
         end,
         rightButtonUp = function()
-            if player.machine.current == 'walkingright' then
+            PlayerInput.dpad.right = false
+            if not PlayerInput.dpadHeld() then
                 player.machine:idle()
             end
         end,

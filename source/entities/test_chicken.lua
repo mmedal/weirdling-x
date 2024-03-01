@@ -43,6 +43,7 @@ function TestChicken:init(level, tilePositionXY)
         {}
     )
     self:addTraits({ CanMove })
+    self.speed = 3
 end
 
 function TestChicken:update(sprite)

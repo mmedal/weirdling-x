@@ -30,42 +30,38 @@ function CanMove.machineCallbacks()
     return {
         onmovingdown = function(self, event, from, to)
             self.options.parent.facing = Constants.DOWN
-            self.options.parent.velocity.y = self.options.parent.speed
-            self.options.parent.velocity.x = 0
             self.options.parent.sprite:trigger_movedown_ani()
         end,
         onmovingup = function(self, event, from, to)
             self.options.parent.facing = Constants.UP
-            self.options.parent.velocity.y = -self.options.parent.speed
-            self.options.parent.velocity.x = 0
             self.options.parent.sprite:trigger_moveup_ani()
         end,
         onmovingleft = function(self, event, from, to)
             self.options.parent.facing = Constants.LEFT
-            self.options.parent.velocity.y = 0
-            self.options.parent.velocity.x = -self.options.parent.speed
             self.options.parent.sprite:trigger_moveleft_ani()
         end,
         onmovingright = function(self, event, from, to)
             self.options.parent.facing = Constants.RIGHT
-            self.options.parent.velocity.y = 0
-            self.options.parent.velocity.x = self.options.parent.speed
             self.options.parent.sprite:trigger_moveright_ani()
         end,
         onattemptingmove = function(self, event, from, to, direction)
             if direction == Constants.UP then
+                self.options.parent.facing = Constants.UP
                 self.options.parent.sprite:trigger_moveup_ani()
                 self.options.parent.velocity.y = -self.options.parent.speed
                 self.options.parent.velocity.x = 0
             elseif direction == Constants.DOWN then
+                self.options.parent.facing = Constants.DOWN
                 self.options.parent.sprite:trigger_movedown_ani()
                 self.options.parent.velocity.y = self.options.parent.speed
                 self.options.parent.velocity.x = 0
             elseif direction == Constants.LEFT then
+                self.options.parent.facing = Constants.LEFT
                 self.options.parent.sprite:trigger_moveleft_ani()
                 self.options.parent.velocity.y = 0
                 self.options.parent.velocity.x = -self.options.parent.speed
             elseif direction == Constants.RIGHT then
+                self.options.parent.facing = Constants.RIGHT
                 self.options.parent.sprite:trigger_moveright_ani()
                 self.options.parent.velocity.y = 0
                 self.options.parent.velocity.x = self.options.parent.speed
@@ -94,7 +90,7 @@ function CanMove.methods()
     return {
         applyMove = function(self)
             if self.velocity.x == 0 and self.velocity.y == 0 then
-                self.machine:idle()
+                -- self.machine:idle()
             else
                 local new_position = self.level:pixelTraverse(self.position, self.velocity)
                 if new_position == self.position then
@@ -109,6 +105,7 @@ function CanMove.methods()
                     elseif new_position.y > self.position.y then
                         self.machine:movedown()
                     else
+                        print('should something happen')
                         -- TODO: should something happen here?
                     end
                 end
