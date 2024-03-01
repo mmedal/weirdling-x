@@ -47,7 +47,7 @@ function Player:init(level, tilePositionXY)
         },
         {
             onshooting = function(self, event, from, to)
-                Bullet(self.options.player)
+                Bullet(self.options.parent)
                 self:idle()
             end,
         }
