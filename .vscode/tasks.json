@@ -12,8 +12,14 @@
       "label": "Playdate: Run"
     },
     {
+      "label": "Playdate: Update Imports",
+      "type": "shell",
+      "command": "bash",
+      "args": ["utilities/update-imports", "source"],
+    },
+    {
       "label": "Playdate: Build and Run",
-      "dependsOn": ["Playdate: Build", "Playdate: Run"],
+      "dependsOn": ["Playdate: Update Imports", "Playdate: Build", "Playdate: Run"],
       "dependsOrder": "sequence",
       "problemMatcher": [],
       "group": {

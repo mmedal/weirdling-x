@@ -7,6 +7,7 @@ import "CoreLibs/timer"
 import "CoreLibs/ui"
 
 import "./game"
+import './importer'
 
 local gfx <const> = playdate.graphics
 playdate.display.setRefreshRate(40)

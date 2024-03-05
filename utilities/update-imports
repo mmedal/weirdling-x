@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Get the root path from the first command-line argument
+root_path=$1
+
+# Directories to search for Lua files
+directories=("entities" "input" "lib" "scenes")
+
+# Initialize the import statements
+import_statements=""
+
+# Traverse each directory
+for dir in "${directories[@]}"; do
+    # Find all the Lua files in the directory
+    files=$(find "$root_path/$dir" -name "*.lua")
+
+    # Add an import statement for each file
+    for file in $files; do
+        # Remove the .lua extension and the root path, and add the import statement
+        file_without_ext="${file%.lua}"
+        file_import_statement="import '${file_without_ext#$root_path/}'"
+
+        # If import_statements is empty, set it to file_import_statement
+        # Otherwise, append a newline and file_import_statement
+        # This avoids a newline at the top of the file
+        if [ -z "$import_statements" ]; then
+            import_statements="$file_import_statement"
+        else
+            import_statements="$import_statements\n$file_import_statement"
+        fi
+    done
+done
+
+# Write the import statements to the importer file
+echo -e "$import_statements" > "$root_path/importer.lua"
